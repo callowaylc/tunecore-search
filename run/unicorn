@@ -1,0 +1,3 @@
+#!/bin/sh
+/etc/init.d/unicorn stop
+/etc/init.d/unicorn start
