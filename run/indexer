@@ -1,0 +1,86 @@
+#!/usr/bin/env ruby
+# requires
+require 'rest_client'
+require 'elasticsearch'
+require 'json'
+require 'tire'
+
+# constants
+
+ROOT     = 'http://ws.spotify.com/search/1/track.json'
+TOTAL    = 1000000
+LIMIT    = 100
+ES_INDEX = 'tunecore'
+ES_TYPE  = 'track'
+
+# patchums
+
+class Hash
+	def +(other)
+		merge(other)
+	end
+end
+
+# main
+
+
+# do a "hard reset" on index
+index = [ ]
+
+Tire.index 'tunecore' do
+  delete
+  create
+end
+
+
+# perform n iterations to satisfy TOTAL number of
+# songs requirement
+(1..TOTAL / LIMIT).each do | page |
+
+	# send GET request and bind to result; here we
+  # are simply search for all 
+  begin
+  	response = RestClient.get ROOT, { accept: :json, params: { 
+  			page: page, q: 'a'
+  	}}
+  rescue
+    puts 'sleeping'
+    sleep 5
+    retry   
+  end
+
+  if response.code != 200
+    puts 'sleeping'
+    sleep 5
+    redo
+  end
+
+	# iterate through result and collect data to
+	# be indexed
+
+
+	JSON.parse(response)['tracks'].each do | record |
+    begin
+  	index << { 
+			name:    record['name'],
+			artists: record['artists'].map { |r| r['name'] },
+      album:   record['album']['name'],
+      id:      Digest::MD5.digest(record["href"]),
+      type:    'track'
+		}
+    rescue
+      puts record
+      exit
+    end
+	end
+
+	# finally index in elasticsearch
+  if page % 10 == 0 
+  	Tire.index 'tunecore' do
+      import index
+    end
+    puts "indexed #{ page * 100 }"
+
+    index = [ ]
+  end
+end
