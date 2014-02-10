@@ -1,5 +1,7 @@
 Tunecore::Application.routes.draw do
-  get "search/index"
+  get 'search', :to => 'search#index'
+
+  root :to => redirect("search")
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

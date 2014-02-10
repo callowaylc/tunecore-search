@@ -1,3 +1,20 @@
 // Place all the styles related to the search controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+div.header {
+	font-weight:bold;
+	font-variant:small-caps;
+	margin-bottom:5px;
+	font-size:20px;
+}
+
+div.field {
+	font:arial;
+	margin-bottom:10px;
+	width:200px;
+}
+
+label {
+	font-variant:small-caps;
+}
