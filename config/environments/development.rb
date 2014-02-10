@@ -26,4 +26,9 @@ Tunecore::Application.configure do
   # This option may cause significant delays in view rendering with a large
   # number of complex assets.
   config.assets.debug = true
+
+  # send transparent cache header on every response
+  config.action_dispatch.default_headers = {
+    'X-Varnish-TTL' => '300s' 
+  } 
 end
