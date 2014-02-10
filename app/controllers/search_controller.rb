@@ -5,7 +5,7 @@ class SearchController < ApplicationController
     # retrieve search params if available
     @page   = params[:page] || 1
     @page   = @page.to_i
-    
+
     @search = params.permit(
       :artists, :album, :name
     )
@@ -38,7 +38,9 @@ class SearchController < ApplicationController
           query do
             boolean do 
               params.each do | key, value |
-                must { string "#{key}:#{value}*" }
+                value.split.each do | token |                  
+                  must { term key, "#{token}*" }
+                end
               end
             end
           end

@@ -1,0 +1,60 @@
+curl -XPUT 'http://localhost:9200/tunecore/song/_mapping' -d '
+{
+    "song" : {
+       "properties":{
+            "artist":{
+               "search_analyzer":"full_name",
+               "index_analyzer":"partial_name",
+               "type":"string"
+            },
+
+            "album":{
+               "search_analyzer":"full_name",
+               "index_analyzer":"partial_name",
+               "type":"string"
+            }, 
+
+            "song":{
+               "search_analyzer":"full_name",
+               "index_analyzer":"partial_name",
+               "type":"string"
+            }                       
+         }
+         
+    }
+}
+'
+
+curl -XPUT 'localhost:9200/tunecore/_settings' -d '{
+  "analysis":{
+               "filter":{
+                  "name_ngrams":{
+                     "side":"front",
+                     "max_gram":20,
+                     "min_gram":2,
+                     "type":"edgeNGram"
+                  }
+               },
+               "analyzer":{
+                  "full_name":{
+                     "filter":[
+                        "standard",
+                        "lowercase",
+                        "asciifolding"
+                     ],
+                     "type":"custom",
+                     "tokenizer":"standard"
+                  },
+                  "partial_name":{
+                     "filter":[
+                        "standard",
+                        "lowercase",
+                        "asciifolding",
+                        "name_ngrams"
+                     ],
+                     "type":"custom",
+                     "tokenizer":"standard"
+                  }
+               }
+            }
+}'
