@@ -39,7 +39,7 @@ class SearchController < ApplicationController
             boolean do 
               params.each do | key, value |
                 value.split.each do | token |                  
-                  must { term key, "#{token}" }
+                  must { term key, "#{token.downcase}" }
                 end
               end
             end
