@@ -12,6 +12,8 @@ class SearchController < ApplicationController
     # finally determine response type/content
     respond_to do |format|
       format.html 
+
+      # include for dropdown
       #format.json { render json: @test.errors, status: :unprocessable_entity }
     end
 
@@ -31,10 +33,13 @@ class SearchController < ApplicationController
       if params.length > 0
         search = Tire.search 'tunecore' do
           query do
-            params.each do | key, value |
-              string "#{key}:#{value}*"
+            boolean do 
+              params.each do | key, value |
+                must { string "#{key}:#{value}*" }
+              end
             end
           end
+
 
           #sort { by : }
           
