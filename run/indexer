@@ -27,10 +27,10 @@ end
 # do a "hard reset" on index
 index = [ ]
 
-Tire.index 'tunecore' do
-  delete
-  create
-end
+#Tire.index 'tunecore' do
+#  delete
+#  create
+#end
 
 
 # perform n iterations to satisfy TOTAL number of
@@ -62,11 +62,11 @@ end
 	JSON.parse(response)['tracks'].each do | record |
     begin
   	index << { 
-			name:    record['name'],
-			artists: record['artists'].map { |r| r['name'] },
+			song:    record['name'],
+			artist: record['artists'][0]['name'],
       album:   record['album']['name'],
       id:      Digest::MD5.digest(record["href"]),
-      type:    'track'
+      type:    'song'
 		}
     rescue
       puts record

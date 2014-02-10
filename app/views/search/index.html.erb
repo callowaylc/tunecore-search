@@ -2,8 +2,8 @@
 
 <form method='GET' >
 	<div class='field'>
-		<label for="artists" >artist</label>
-		<input type='text' name='artists' value="<%= @search['artists'] %>" />
+		<label for="artist" >artist</label>
+		<input type='text' name='artist' value="<%= @search['artist'] %>" />
 	</div>
 
 
@@ -72,7 +72,7 @@
 				<%= i + 1 + ((@page - 1) * 100) %>
 			</div>
 			<div class='result-value result-artist' >
-				<%= result.artists.join(",") %><br />
+				<%= result.artist %><br />
 			</div>
 			<div class='result-value result-album' >
 				<%= result.album %>

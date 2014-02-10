@@ -7,7 +7,7 @@ class SearchController < ApplicationController
     @page   = @page.to_i
 
     @search = params.permit(
-      :artists, :album, :name
+      :artist, :album, :name
     )
     @search['results'] = search
 
@@ -39,7 +39,7 @@ class SearchController < ApplicationController
             boolean do 
               params.each do | key, value |
                 value.split.each do | token |                  
-                  must { term key, "#{token}*" }
+                  must { term key, "#{token}" }
                 end
               end
             end
