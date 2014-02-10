@@ -24,7 +24,7 @@
 
 <hr />
 
-<% if @search['results'].total > 0 %>
+<% if @search['results'] && @search['results'].total > 0 %>
 
 	<div class="pagination-controls" >
 		<div class='pagination-control' >
@@ -78,7 +78,7 @@
 				<%= result.album %>
 			</div>
 			<div class='result-value result-song'>
-				<%= result.name %>
+				<%= result.song %>
 			</div>
 		</div>
 		<div class='space'>&nbsp;</div>
