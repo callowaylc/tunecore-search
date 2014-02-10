@@ -7,7 +7,7 @@ class SearchController < ApplicationController
     @page   = @page.to_i
 
     @search = params.permit(
-      :artist, :album, :name
+      :artist, :album, :song
     )
     @search['results'] = search
 

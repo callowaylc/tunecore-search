@@ -8,7 +8,7 @@ require 'tire'
 # constants
 
 ROOT     = 'http://ws.spotify.com/search/1/track.json'
-TOTAL    = 1000000
+TOTAL    = 100000
 LIMIT    = 100
 ES_INDEX = 'tunecore'
 ES_TYPE  = 'track'
@@ -35,52 +35,61 @@ index = [ ]
 
 # perform n iterations to satisfy TOTAL number of
 # songs requirement
-(1..TOTAL / LIMIT).each do | page |
+('a'..'z').each do | character | 
+  puts "indexing #{character}"
+  
+  (1..TOTAL / LIMIT).each do | page |
 
-	# send GET request and bind to result; here we
-  # are simply search for all 
-  begin
-  	response = RestClient.get ROOT, { accept: :json, params: { 
-  			page: page, q: 'a'
-  	}}
-  rescue
-    puts 'sleeping'
-    sleep 5
-    retry   
-  end
-
-  if response.code != 200
-    puts 'sleeping'
-    sleep 5
-    redo
-  end
-
-	# iterate through result and collect data to
-	# be indexed
-
-
-	JSON.parse(response)['tracks'].each do | record |
+  	# send GET request and bind to result; here we
+    # are simply search for all 
     begin
-  	index << { 
-			song:    record['name'],
-			artist: record['artists'][0]['name'],
-      album:   record['album']['name'],
-      id:      Digest::MD5.digest(record["href"]),
-      type:    'song'
-		}
+    	response = RestClient.get ROOT, { accept: :json, params: { 
+    			page: page, q: character
+    	}}
     rescue
-      puts record
-      exit
+      puts 'sleeping'
+      sleep 5
+      retry   
     end
-	end
 
-	# finally index in elasticsearch
-  if page % 10 == 0 
-  	Tire.index 'tunecore' do
-      import index
+    if response.code != 200
+      puts 'sleeping'
+      sleep 5
+      redo
     end
-    puts "indexed #{ page * 100 }"
 
-    index = [ ]
+  	# iterate through result and collect data to
+  	# be indexed
+
+    if (JSON.parse(response)['tracks'].length == 0) 
+      puts "finished #{character}"
+      break 
+    end
+
+
+  	JSON.parse(response)['tracks'].each do | record |
+      begin
+    	index << { 
+  			song:    record['name'],
+  			artist: record['artists'][0]['name'],
+        album:   record['album']['name'],
+        id:      Digest::MD5.digest(record["href"]),
+        type:    'song'
+  		}
+      rescue
+        puts record
+        exit
+      end
+  	end
+
+  	# finally index in elasticsearch
+    if page % 10 == 0 
+    	Tire.index 'tunecore' do
+        import index
+      end
+      puts "indexed #{ page * 100 }"
+
+      index = [ ]
+    end
   end
 end
