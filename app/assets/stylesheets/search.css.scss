@@ -15,6 +15,30 @@ div.field {
 	width:200px;
 }
 
+div.result {
+	width:100%;
+	clear:both;
+}
+
+div.space { 
+	margin-bottom:5px;
+}
+
+div.result-value {
+	float:left;
+}
+
+div.result-artist { 
+	width:25%;
+}
+div.result-album {
+	width:25%;
+}
+
+div.result-song {
+	width:50%;
+}
+
 label {
 	font-variant:small-caps;
 }

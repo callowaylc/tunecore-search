@@ -2,24 +2,45 @@
 
 <form method='GET' >
 	<div class='field'>
-		<label for="artist" >artist</label>
-		<input type='text' name='artist' />
+		<label for="artists" >artist</label>
+		<input type='text' name='artists' value="<%= @search['artists'] %>" />
 	</div>
 
 
 	<div class='field'>
 		<label for="album" >album</label>
-		<input type='text' name='album' />
+		<input type='text' name='album' value="<%= @search['album'] %>" />
 	</div>
 
 	<div class='field'>
 		<label for="song" >song</label>
-		<input type='text' name='song' />
+		<input type='text' name='name' value="<%= @search['name'] %>" />
 	</div>
 
 	<div class='field'>
-		<input type='button' value='search!' />
+		<input type='submit' value='search' />
 	</div>
 </form>
 
 <hr />
+
+<% if @search['results'] %>
+	<% @search['results'].results.each do | result | %>
+		<div class='result' >
+			<div class='result-value result-artist' >
+				<%= result.artists.join(",") %><br />
+			</div>
+			<div class='result-value result-album' >
+				<%= result.album %>
+			</div>
+			<div class='result-value result-song'>
+				<%= result.name %>
+			</div>
+		</div>
+		<div class='space'>&nbsp;</div>
+
+	<% end.empty? and begin %>
+		<div class='no-results'> no results </div>
+
+	<% end %>
+<% end %>
