@@ -24,9 +24,53 @@
 
 <hr />
 
-<% if @search['results'] %>
-	<% @search['results'].results.each do | result | %>
+<% if @search['results'].total > 0 %>
+
+	<div class="pagination-controls" >
+		<div class='pagination-control' >
+			<a href='/search?<%= paginate @page - 1 %>'>
+			<< previous
+			</a>
+		</div>
+
+		<div class='pagination-control' >
+			<a href='/search?<%= paginate @page + 1 %>'>
+			next >>
+			</a>
+		</div>
+
+	</div>
+
+	<div class="pagination-results" >
+		page <%= @page %> of 
+		<%= (@search['results'].total / (@page * 100)) + 1 %>
+		&nbsp; (found <%= @search['results'].total %> records)
+	</div>
+
+
+	<div class="space"></div>
+
+	<div class='result' >
+		<div class='result-counter result-value' >
+			&nbsp;
+		</div>
+		<div class='result-header result-artist' >
+			artist<br />
+		</div>
+		<div class='result-header result-album' >
+			album
+		</div>
+		<div class='result-header result-song'>
+			song
+		</div>
+	</div>
+	<div class='space'>&nbsp;</div>
+
+	<% @search['results'].each_with_index do | result, i | %>
 		<div class='result' >
+			<div class='result-counter result-value' >
+				<%= i + 1 %>
+			</div>
 			<div class='result-value result-artist' >
 				<%= result.artists.join(",") %><br />
 			</div>
@@ -39,8 +83,9 @@
 		</div>
 		<div class='space'>&nbsp;</div>
 
-	<% end.empty? and begin %>
-		<div class='no-results'> no results </div>
-
 	<% end %>
+
+<% else %>
+	<div class='no-results'> no results </div>
+
 <% end %>

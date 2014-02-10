@@ -20,19 +20,43 @@ div.result {
 	clear:both;
 }
 
+div.pagination-results {
+	float:right;
+}
+
+div.pagination-controls {
+	float:left;
+	width:500px;
+}
+
+div.pagination-control {
+	float:left;
+	margin-right:15px;
+}
+
 div.space { 
 	margin-bottom:5px;
+	clear:both;
 }
 
 div.result-value {
 	float:left;
 }
 
+div.result-header {
+	float:left;
+	font-weight:bold;
+	font-variant:small-caps;
+}
+
 div.result-artist { 
-	width:25%;
+	width:23%;
 }
 div.result-album {
-	width:25%;
+	width:23%;
+}
+div.result-counter {
+	width:2%;
 }
 
 div.result-song {

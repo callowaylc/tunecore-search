@@ -4,13 +4,10 @@ class SearchController < ApplicationController
 
     # retrieve search params if available
     @page   = params[:page] || 1
-    @page   = @page.to_i
-    
     @search = params.permit(
       :artists, :album, :name
     )
     @search['results'] = search
-
 
     # finally determine response type/content
     respond_to do |format|
@@ -36,21 +33,16 @@ class SearchController < ApplicationController
       if params.length > 0
         search = Tire.search 'tunecore' do
           query do
-            boolean do 
-              params.each do | key, value |
-                must { string "#{key}:#{value}*" }
-              end
+            params.each do | key, value |
+              string "#{key}:#{value}*"
             end
           end
-
 
           #sort { by : }
           
           from (page - 1) * 100
           size 100
         end
-
-        return search.results
       end
     end
 
